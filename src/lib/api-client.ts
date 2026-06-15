@@ -9,7 +9,6 @@ export const apiClient = axios.create({
   },
 });
 
-// Add request interceptor for auth token
 apiClient.interceptors.request.use(
   (config) => {
     const token = typeof window !== 'undefined' ? localStorage.getItem('auth_token') : null;
@@ -21,7 +20,6 @@ apiClient.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Add response interceptor for error handling
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -84,9 +82,7 @@ export async function deleteRequest<T = any>(url: string, config?: AxiosRequestC
   return request<T>('DELETE', url, undefined, config);
 }
 
-// Specific API endpoints
 export const api = {
-  // Auth
   auth: {
     login: (email: string, password: string) =>
       post('/auth/login', { email, password }),
@@ -94,8 +90,6 @@ export const api = {
       post('/auth/register', { email, password, full_name: fullName }),
     logout: () => post('/auth/logout', {}),
   },
-
-  // Tickets
   tickets: {
     list: (params?: any) => get('/tickets', { params }),
     get: (id: string) => get(`/tickets/${id}`),
@@ -103,34 +97,24 @@ export const api = {
     update: (id: string, data: any) => patch(`/tickets/${id}`, data),
     delete: (id: string) => deleteRequest(`/tickets/${id}`),
   },
-
-  // Specialists
   specialists: {
     list: (params?: any) => get('/specialists', { params }),
     get: (id: string) => get(`/specialists/${id}`),
   },
-
-  // Payments
   payments: {
     list: (params?: any) => get('/payments', { params }),
     create: (data: any) => post('/payments', data),
   },
-
-  // Chat
   chat: {
     getConversations: () => get('/chat/conversations'),
     getMessages: (conversationId: string) => get(`/chat/conversations/${conversationId}/messages`),
     sendMessage: (conversationId: string, message: string) =>
       post(`/chat/conversations/${conversationId}/messages`, { message }),
   },
-
-  // AI
   ai: {
     classifyTicket: (title: string, description: string) =>
       post('/ai/classify', { title, description }),
   },
-
-  // Reports
   reports: {
     getDashboard: () => get('/reports/dashboard'),
   },
