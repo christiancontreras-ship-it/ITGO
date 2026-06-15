@@ -55,7 +55,7 @@ export async function request<T = any>(
       success: true,
       data: response.data || response,
       error: null,
-      message: response.message || 'Success',
+      message: 'Success',
     };
   } catch (error) {
     const axiosError = error as AxiosError;
